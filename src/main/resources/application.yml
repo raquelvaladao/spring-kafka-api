@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+#spring:
+#  application:
+#    datasource:
+#      url:
+
+logging:
+  level:
+    com:
+      args:
+        brtravels:
+          clients:
+            clash:
+              ClashClient: DEBUG
+clash:
+  apiKey:
+  baseUrl:
+  clientName:
+mailgun:
+  apiKey:
+  baseUrl:
+  clientName:
+
+
+management:
+  metrics:
+    export:
+      datadog:
+        apiKey: NOT_NULL
+        enabled: false
