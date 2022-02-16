@@ -5,36 +5,57 @@ import com.args.brtravels.clients.clash.ClashClient;
 import com.args.brtravels.clients.clash.models.RequestToken;
 import com.args.brtravels.clients.clash.models.ResponseClan;
 import com.args.brtravels.clients.clash.models.ResponsePlayerStatus;
+import com.args.brtravels.models.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+
+import static java.lang.String.*;
+import static org.springframework.http.HttpStatus.*;
 
 
 @RestController
+@RequestMapping("api/v1/clash")
 @Slf4j
 @AllArgsConstructor
 public class ClashController {
 
     private ClashClient clashClient;
+    private KafkaTemplate<String, Message> kafkaTemplate;
 
-    @GetMapping
-    public ResponseClan getClans() {
+    @PostMapping
+    public ResponseEntity<String> getClans(@RequestParam("clanName") String clanName,
+                                           @RequestParam("email") String email) {
 
-        ResponseClan response = clashClient
-                .getClansByNameAndLimitResponse("Axe", 10);
-        log.info("{}", response.toString());
+            ResponseClan response = clashClient
+                    .getClansByNameAndLimitResponse(clanName, 10);
 
-        ResponsePlayerStatus statusResponse = clashClient
-                .verifyPlayerStatus(
-                        "#U90G08Y0",
-                        RequestToken
-                                .builder()
-                                .token("xbN7gbeg")
+            ResponsePlayerStatus statusResponse = clashClient
+                    .verifyPlayerStatus(
+                            "#U90G08Y0",
+                            RequestToken
+                                    .builder()
+                                    .token("xbN7gbeg")
+                                    .build()
+                    );
+
+            if (statusResponse.getStatus().equals("invalid")) {
+                kafkaTemplate.send(
+                        "userStatus",
+                        Message.builder()
+                                .email(email)
+                                .body(format("List of clans sent :: %s", response.getClans().toString()))
+                                .playerTag(statusResponse.getTag())
+                                .date(LocalDateTime.now())
                                 .build()
                 );
-        log.info("{}", statusResponse.toString());
-
-        return response;
+            }
+            return ResponseEntity.status(OK).build();
     }
+
+
 }
