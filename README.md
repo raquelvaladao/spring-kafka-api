@@ -1,8 +1,7 @@
 ### project example
-
 ![repo-imgs/clashschema.png](repo-imgs/clashschema.png)
  
-##run project
+## run project
 + run  the following command to start containers
 ```
 docker compose up -d
@@ -11,4 +10,4 @@ docker compose up -d
 + create clashDb in pgAdmin with 'postgress' container as host
 + run main application.
 
-##wip...
+## wip...
