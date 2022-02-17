@@ -9,11 +9,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+      generate-ddl: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+#  profiles:
+#    active: dev
 
   kafka:
     bootstrap-servers: localhost:9092
@@ -30,10 +33,10 @@ logging:
               ClashClient: DEBUG
 
 clash:
-  apiKey: ${CLASH_API_KEY}
-  baseUrl: ${CLASH_URL}
-  clientName: clash
+  apiKey: ${API_KEY_CLASH_CLIENT}
+  baseUrl: ${BASE_URL_CLASH_CLIENT}
+  clientName: ${CLIENT_NAME_CLASH_CLIENT}
 mailgun:
-  apiKey: ${MAILGUN_API_KEY}
-  baseUrl: ${MAILGUN_URL}
-  clientName: mailgun
+  apiKey: ${API_KEY_MAILGUN_CLIENT}
+  baseUrl: ${BASE_URL_MAILGUN_CLIENT}
+  clientName: ${CLIENT_NAME_MAILGUN_CLIENT}
