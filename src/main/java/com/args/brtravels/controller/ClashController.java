@@ -48,7 +48,7 @@ public class ClashController {
                         "userStatus",
                         Message.builder()
                                 .email(email)
-                                .body(format("List of clans sent :: %s", response.getClans().toString()))
+                                .body("List of clans sent")
                                 .playerTag(statusResponse.getTag())
                                 .date(LocalDateTime.now())
                                 .build()
