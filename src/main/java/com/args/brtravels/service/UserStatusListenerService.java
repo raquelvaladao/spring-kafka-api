@@ -36,7 +36,7 @@ public class UserStatusListenerService {
 
         mailgunClient.sendEmail(email);
 
-        messageRepository.save(message);
+//        messageRepository.save(message);
     }
 
 }
